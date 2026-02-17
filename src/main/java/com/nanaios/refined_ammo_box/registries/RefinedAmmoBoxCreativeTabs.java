@@ -1,6 +1,7 @@
 package com.nanaios.refined_ammo_box.registries;
 
 import com.nanaios.refined_ammo_box.RefinedAmmoBox;
+import com.nanaios.refined_ammo_box.RefinedAmmoBoxLang;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,7 +15,7 @@ public class RefinedAmmoBoxCreativeTabs {
 
     static {
         TABS.register("applied_ammo_box_tab",() -> CreativeModeTab.builder()
-                .title(Component.translatable("itemGroup." + RefinedAmmoBox.MODID + ".creative_tab"))
+                .title(RefinedAmmoBoxLang.CREATIVE_TAB_NAME.get())
                 .icon(() -> new ItemStack(RefinedAmmoBoxItems.AMMO_BOX.get()))
                 .displayItems((params, output) -> {
                     for(RegistryObject<Item> registry : RefinedAmmoBoxItems.ITEMS.getEntries()){
