@@ -19,7 +19,7 @@ public class RefinedAmmoBoxClient {
                 ResourceLocation.fromNamespaceAndPath(RefinedAmmoBox.MODID, "linked"),
                 (stack, level, entity, seed) -> {
                     if (stack.getItem() instanceof WirelessAmmoBoxItem item) {
-                        if (item.isLinked(stack) && item.getEnergy(stack) > 0) {
+                        if (item.isLinked(stack) && item.getEnergyStored(stack) > 0) {
                             return 1.0f;
                         } else {
                             return 0.0f;

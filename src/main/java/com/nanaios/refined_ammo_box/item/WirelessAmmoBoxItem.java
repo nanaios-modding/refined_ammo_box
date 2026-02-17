@@ -1,18 +1,26 @@
 package com.nanaios.refined_ammo_box.item;
 
 import com.nanaios.refined_ammo_box.RefinedAmmoBoxLang;
+import com.nanaios.refined_ammo_box.config.RefinedAmmoBoxConfig;
 import com.nanaios.refined_ammo_box.util.RSLinkHelper;
-import com.nanaios.refined_ammo_box.util.RefinedAmmoBoxMessages;
+import com.nanaios.refined_ammo_box.util.RSLinkHelper.ActionResult;
 import com.refinedmods.refinedstorage.RS;
 import com.refinedmods.refinedstorage.api.network.INetwork;
+import com.refinedmods.refinedstorage.api.util.Action;
 import com.refinedmods.refinedstorage.item.capabilityprovider.EnergyCapabilityProvider;
 import com.refinedmods.refinedstorage.render.Styles;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
+import com.tacz.guns.api.DefaultAssets;
+import com.tacz.guns.api.TimelessAPI;
+import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.api.item.builder.AmmoItemBuilder;
 import com.tacz.guns.item.AmmoBoxItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,12 +38,16 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.EmptyEnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IEnergyItem,ITimeStamp{
+    public static String NBT_LEVEL_KEY = "ammoBoxExistLevel";
+    public static String NBT_BLOCK_POS_KEY = "ammoBoxExistBlockPos";
+
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         // 手に持っているアイテムを取得
@@ -45,7 +57,7 @@ public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IE
         if (player.isCrouching()) {
             if (!level.isClientSide) {
                 clearAmmoData(stack);
-                player.displayClientMessage(RefinedAmmoBoxMessages.CLEAR_AMMO_DATA.get(), true);
+                player.displayClientMessage(RefinedAmmoBoxLang.CLEAR_AMMO_DATA.get(), true);
             }
 
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
@@ -80,10 +92,8 @@ public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IE
             // 弾薬数を更新
             ActionResult result = updateAmmoCount(stack);
 
-            switch (result.status()) {
-                case DEVICE_NOT_LINKED -> player.displayClientMessage(PlayerMessages.DeviceNotLinked.text(), true);
-                case LINKED_NETWORK_NOT_FOUND ->
-                        player.displayClientMessage(PlayerMessages.LinkedNetworkNotFound.text(), true);
+            if (result.status() == ActionResult.Status.LINKED_NETWORK_NOT_FOUND) {
+                player.displayClientMessage(RefinedAmmoBoxLang.NETWORK_NOT_FOUND.get(),true);
             }
         }
     }
@@ -172,7 +182,7 @@ public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IE
         if (level == null || pos == null) return new ActionResult(ActionResult.Status.LINKED_NETWORK_NOT_FOUND, 0);
 
         // 弾薬数を更新
-        ActionResult result = AE2LinkHelper.extractionAmmo(level, pos, stack, ammo, Integer.MAX_VALUE, Actionable.SIMULATE);
+        ActionResult result = RSLinkHelper.extractionAmmo(level, pos, stack, ammo, Integer.MAX_VALUE, Action.SIMULATE);
         // 弾薬箱の弾薬数を直接更新
         super.setAmmoCount(stack, result.count());
         // リンク状態を更新
@@ -195,10 +205,10 @@ public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IE
 
         // 弾薬をAE2ネットワークから取り出す
         ItemStack ammo = AmmoItemBuilder.create().setId(getAmmoId(ammoBox)).setCount(1).build();
-        // AE2LinkHelper.extractionAmmo(level, pos, ammoBox, ammo, diff, Actionable.MODULATE);
+        RSLinkHelper.extractionAmmo(level, pos, ammoBox, ammo, diff, Action.PERFORM);
 
         // エネルギーを消費
-        // extractAEPower(ammoBox, AppliedAmmoBoxConfig.AMMO_BOX_USE_POWER_PER_AMMO.get() * diff, Actionable.MODULATE);
+        this.extractEnergy(ammoBox, RefinedAmmoBoxConfig.AMMO_BOX_USE_POWER_PER_AMMO.get() * diff, false);
 
         // 弾薬数を再取得して設定
         updateAmmoCount(ammoBox);
@@ -253,6 +263,8 @@ public class WirelessAmmoBoxItem extends AmmoBoxItem implements ILinkableItem,IE
 
     @Override
     public @NotNull InteractionResult useOn(UseOnContext ctx) {
+        if(ctx.getLevel().isClientSide) return InteractionResult.PASS;
+
         Player player = ctx.getPlayer();
         if (player == null) return InteractionResult.PASS;
         ItemStack stack = player.getItemInHand(ctx.getHand());

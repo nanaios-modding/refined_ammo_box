@@ -3,7 +3,7 @@ package com.nanaios.refined_ammo_box.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class RefinedAmmoBoxConfig {
-    public static ForgeConfigSpec.DoubleValue AMMO_BOX_USE_POWER_PER_AMMO;
+    public static ForgeConfigSpec.IntValue AMMO_BOX_USE_POWER_PER_AMMO;
 
     public static ForgeConfigSpec init() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -17,9 +17,8 @@ public class RefinedAmmoBoxConfig {
     private static void initPowerConfig(ForgeConfigSpec.Builder builder) {
         builder.push("power");
 
-        builder.comment("Energy consumed per round of ammo retrieved from an ammo box, default: 1000.0");
-        AMMO_BOX_USE_POWER_PER_AMMO = builder.defineInRange("AmmoBoxUsePowerPerAmmo",1000.0,0.0,Double.MAX_VALUE);
-
+        builder.comment("Energy consumed per round of ammo retrieved from an ammo box, default: 2");
+        AMMO_BOX_USE_POWER_PER_AMMO = builder.defineInRange("AmmoBoxUsePowerPerAmmo",2,0,Integer.MAX_VALUE);
         builder.pop();
     }
 }
