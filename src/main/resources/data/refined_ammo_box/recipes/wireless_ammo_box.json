@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "aba",
+    "cdc",
+    "aea"
+  ],
+  "key": {
+    "a": {
+      "item": "refinedstorage:advanced_processor"
+    },
+    "b": {
+      "item": "refinedstorage:wireless_transmitter"
+    },
+    "c": {
+      "item": "refinedstorage:controller"
+    },
+    "d": {
+      "type": "forge:nbt",
+      "item": "tacz:ammo_box",
+      "nbt": {
+        "Level": 2
+      }
+    },
+    "e": {
+      "item": "refinedstorage:wireless_grid"
+    }
+  },
+  "result": {
+    "item": "refined_ammo_box:ammo_box",
+    "count": 1
+  }
+}
