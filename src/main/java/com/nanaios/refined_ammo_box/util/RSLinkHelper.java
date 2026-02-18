@@ -2,9 +2,9 @@ package com.nanaios.refined_ammo_box.util;
 
 import com.refinedmods.refinedstorage.api.network.INetwork;
 import com.refinedmods.refinedstorage.api.network.INetworkNodeGraphEntry;
-import com.refinedmods.refinedstorage.api.network.IWirelessTransmitter;
 import com.refinedmods.refinedstorage.api.network.node.INetworkNode;
 import com.refinedmods.refinedstorage.api.util.Action;
+import com.refinedmods.refinedstorage.apiimpl.network.node.WirelessTransmitterNetworkNode;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -104,7 +104,7 @@ public class RSLinkHelper {
             if(!node.isActive()) continue;
 
             // Wireless Transmitterかどうかチェック
-            if(!(node instanceof IWirelessTransmitter transmitter)) continue;
+            if(!(node instanceof WirelessTransmitterNetworkNode transmitter)) continue;
 
             // 同一dimensionでなければ飛ばす
             if(!transmitter.getDimension().equals(level.dimension())) continue;
