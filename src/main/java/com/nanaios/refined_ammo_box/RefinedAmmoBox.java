@@ -24,7 +24,10 @@ public class RefinedAmmoBox {
         IEventBus modEventBus = context.getModEventBus();
 
         // クリエイティブタブとアイテムの登録
-        RefinedAmmoBoxItems.ITEMS.register(modEventBus);
+        RefinedAmmoBoxItems.WIRELESS_ITEMS.register(modEventBus);
+        RefinedAmmoBoxItems.FAKE_ITEMS.register(modEventBus);
+
+        // クリエイティブタブの登録
         RefinedAmmoBoxCreativeTabs.TABS.register(modEventBus);
 
         // コンフィグの登録

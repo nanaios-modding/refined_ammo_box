@@ -1,5 +1,6 @@
 {
-  "item.refined_ammo_box.ammo_box": "無線弾薬箱",
+  "item.refined_ammo_box.ammo_box": "Wireless Ammo Box",
+  "item.refined_ammo_box.creative_ammo_box": "Creative Wireless Ammo Box",
   "itemGroup.refined_ammo_box.creative_tab": "Refined Ammo Box",
-  "chat.refined_ammo_box.cleared_ammo_data": "弾薬データがリセットされました"
+  "chat.refined_ammo_box.cleared_ammo_data": "Ammo data has been reset"
 }

@@ -13,7 +13,7 @@ public class RefinedAmmoBoxCreativeTabs {
     static {
         TABS.register("refined_ammo_box_tab",() -> CreativeModeTab.builder()
                 .title(RefinedAmmoBoxLang.CREATIVE_TAB_NAME.get())
-                .icon(() -> new ItemStack(RefinedAmmoBoxItems.AMMO_BOX.get()))
+                .icon(() -> new ItemStack(RefinedAmmoBoxItems.ICON.get()))
                 .displayItems((params, output) -> RefinedAmmoBoxItems.registerCreativeTab(output))
                 .build()
         );
