@@ -23,14 +23,17 @@ public class RefinedAmmoBox {
     public RefinedAmmoBox(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-        // クリエイティブタブとアイテムの登録
+        // アイテムの登録
+        LOGGER.info("Registering Refined Ammo Box items...");
         RefinedAmmoBoxItems.WIRELESS_ITEMS.register(modEventBus);
         RefinedAmmoBoxItems.FAKE_ITEMS.register(modEventBus);
 
         // クリエイティブタブの登録
+        LOGGER.info("Registering Refined Ammo Box creative tabs...");
         RefinedAmmoBoxCreativeTabs.TABS.register(modEventBus);
 
         // コンフィグの登録
+        LOGGER.info("Registering Refined Ammo Box config...");
         context.registerConfig(ModConfig.Type.COMMON, RefinedAmmoBoxConfig.init());
     }
 
