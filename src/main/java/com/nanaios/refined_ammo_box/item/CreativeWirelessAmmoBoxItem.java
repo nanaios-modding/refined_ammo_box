@@ -3,6 +3,7 @@ package com.nanaios.refined_ammo_box.item;
 import com.nanaios.refined_ammo_box.RefinedAmmoBoxLang;
 import com.nanaios.refined_ammo_box.util.RSLinkHelper;
 import com.refinedmods.refinedstorage.render.Styles;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -31,7 +32,7 @@ public class CreativeWirelessAmmoBoxItem extends WirelessAmmoBoxItem {
 
     @Override
     public @NotNull Component getName(ItemStack stack) {
-        return RefinedAmmoBoxLang.CREATIVE_WIRELESS_AMMO_BOX_NAME.get();
+        return RefinedAmmoBoxLang.CREATIVE_WIRELESS_AMMO_BOX_NAME.get().withStyle(ChatFormatting.DARK_PURPLE);
     }
 
     @Override
